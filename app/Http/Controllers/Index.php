@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class Index extends Controller
 {
-    public function counts($userId, $type,$startTime, $endTime)
+    public function counts($userId, $type, $startTime, $endTime)
     {
         $return = $this->restInit();
         if ($userId > 0) {
@@ -33,7 +33,7 @@ class Index extends Controller
         return response()->json($return);
     }
 
-    public function infos($userId, $type,$startTime, $endTime)
+    public function infos($userId, $type, $startTime, $endTime)
     {
         $return = $this->restInit();
         if ($userId > 0) {
@@ -53,6 +53,23 @@ class Index extends Controller
         }
         return response()->json($return);
     }
+
+    public function ranks($type, $startTime, $endTime)
+    {
+        $Integrals = new Integrals();
+        $data = [
+            'type' => $type,
+            'startTime' => $startTime,
+            'endTime' => $endTime,
+        ];
+        $return = [
+            'code' => 200,
+            'result' => $Integrals->getUserIntegralRank($data, 10)
+        ];
+        return response()->json($return);
+
+    }
+
 
     public function add(Request $request)
     {

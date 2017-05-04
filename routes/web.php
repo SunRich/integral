@@ -13,5 +13,6 @@
 
 $app->get('/counts/users/{userId}/type/{type}/start/{startTime}/end/{endTime}','Index@counts');
 $app->get('/infos/users/{userId}/type/{type}/start/{startTime}/end/{endTime}','Index@infos');
+$app->get('/ranks/type/{type}/start/{startTime}/end/{endTime}','Index@ranks');
 $app->post('/add','Index@add');
 $app->post('/expend','Index@expend');

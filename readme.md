@@ -10,7 +10,9 @@ modifiedOn: 2017-05-04
 php -S localhost:3000 -t public
 ```
 2. 复制.env.example到.env并修改其中的数据库配置。
-
+```
+composer run-script copy-env
+```
 3. 数据初始化
 ```
 php artisan migrate
@@ -34,14 +36,14 @@ phpunit
      ```
      {
      "code": 200,
-     "message": "ok"
+     "result": "2"
      }
      ```
    2. 失败响应
      ```
      {
      "code": 404,
-     "message": "error"
+     "message": "error message"
      }
      ```
 ### 消耗积分
@@ -55,42 +57,91 @@ phpunit
      ```
      {
      "code": 200,
-     "message": "ok"
+     "result": "2"
      }
      ```
    2. 失败响应
      ```
      {
      "code": 404,
-     "message": "error"
+     "message": "error message"
      }
      ```
 
 ###  获取一个用户的积分总数
-  - 请求 `get $host/counts/users/{userId}/type/{type}`
+  - 请求 `get $host/counts/users/{userId}/type/{type}/start/{startTime}/end/{endTime}`
   - 参数
     1. userId(int):用户编号
-  - 请求示例:`get $host/counts/users/1/type/add`
+    2. type(string):类型:add=>增加，expend=>消耗，left=>当前剩余
+    3. start(string):开始时间
+    4. end(string):结束时间
+  - 请求示例:`get $host/counts/users/1/type/add/start/2017-05-01/end/2017-05-04`
   - 响应:
     ```
     {
       "code": 200,
-      "result": [
-        "1"
-      ]
+      "result": 2
     }
     ```
 ###  获取一个用户的积分详情
-  - 请求 `get $host/infos/users/{userId}/type/{type}`
+  - 请求 `get $host/infos/users/{userId}/type/{type}/start/{startTime}/end/{endTime}`
   - 参数
-    1. userId(int):用户编号
-  - 请求示例:`get $host/infos/users/1/type/add`
+       1. userId(int):用户编号
+       2. type(string):类型:add=>增加，expend=>消耗，left=>当前剩余
+       3. start(string):开始时间
+       4. end(string):结束时间
+  - 请求示例:`get $host/infos/users/1/type/add/start/2017-05-01/end/2017-05-04`
   - 响应:
     ```
     {
       "code": 200,
-      "result": [
-        "1"
-      ]
+      "result": {
+        "total": 1,
+        "per_page": 10,
+        "current_page": 1,
+        "last_page": 1,
+        "next_page_url": null,
+        "prev_page_url": null,
+        "from": 1,
+        "to": 1,
+        "data": [
+          {
+            "id": 1,
+            "user_id": 1,
+            "integral": 2,
+            "content": "签到增加积分",
+            "time": "2017-05-04 14:59:15"
+          }
+        ]
+      }
+    }
+    ```
+###  获取积分排行
+  - 请求 `get $host/ranks/type/{type}/start/{startTime}/end/{endTime}`
+  - 参数
+       1. type(string):类型:add=>增加，expend=>消耗，left=>当前剩余
+       2. start(string):开始时间
+       3. end(string):结束时间
+  - 请求示例:`get $host/ranks/type/add/start/2017-05-01/end/2017-05-04`
+  - 响应:
+    ```
+    {
+      "code": 200,
+      "result": {
+        "total": 1,
+        "per_page": 10,
+        "current_page": 1,
+        "last_page": 1,
+        "next_page_url": null,
+        "prev_page_url": null,
+        "from": 1,
+        "to": 1,
+        "data": [
+          {
+            "integral_sum": "2",
+            "user_id": 1
+          }
+        ]
+      }
     }
     ```

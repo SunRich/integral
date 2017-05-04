@@ -8,6 +8,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Integrals extends Model
 {
@@ -55,6 +56,16 @@ class Integrals extends Model
         $map[] = ['user_id', '=', $data['userId']];
         $map = $this->getTypeWhere($map, $data['type']);
         return $this::where($map)->whereBetween('time', [$data['startTime'], $data['endTime']])->paginate($pageSize);
+    }
+
+    public function getUserIntegralRank($data,$pageSize)
+    {
+        $map=[];
+        $map = $this->getTypeWhere($map, $data['type']);
+        return $this::where($map)
+            ->select(DB::raw('sum(integral) as integral_sum,user_id'))
+            ->groupBy('user_id')
+            ->orderBy('integral_sum', 'desc')->paginate($pageSize);
     }
 
     public function getTypeWhere($where, $type)
